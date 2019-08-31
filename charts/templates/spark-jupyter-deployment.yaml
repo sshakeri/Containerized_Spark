@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "jupyter-fullname" . }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "{{ .Release.Name }}-{{ .Values.Jupyter.Component }}"
+spec:
+  ports:
+    - name: http
+      port: {{ .Values.Jupyter.ServicePort }}
+      targetPort: {{ .Values.Jupyter.ContainerPort }}
+      nodePort: {{ .Values.Jupyter.ServicePort }}
+    - name: dirver-ui
+      port: {{ .Values.Jupyter.ServiceWebUIPort }}
+      targetPort: {{ .Values.Jupyter.ContainerWebUIPort }}
+      nodePort: {{ .Values.Jupyter.ServiceWebUIPort }}
+  selector:
+    component: "{{ .Release.Name }}-{{ .Values.Jupyter.Component }}"
+  type: {{ .Values.Jupyter.ServiceType }}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "jupyter-fullname" . }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: "{{ .Release.Name }}-{{ .Values.Jupyter.Component }}"
+spec:
+  replicas: {{ default 1 .Values.Jupyter.Replicas }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      component: "{{ .Release.Name }}-{{ .Values.Jupyter.Component }}"
+  template:
+    metadata:
+      labels:
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        component: "{{ .Release.Name }}-{{ .Values.Jupyter.Component }}"
+    spec:
+      containers:
+        - name: {{ template "jupyter-fullname" . }}
+          image: "{{ .Values.Jupyter.Image }}:{{ .Values.Jupyter.ImageTag }}"
+          ports:
+            - containerPort: {{ .Values.Jupyter.ContainerPort }}
+              name: http
+          resources:
+            requests:
+              cpu: "{{ .Values.Jupyter.Cpu }}"
+              memory: "{{ .Values.Jupyter.Memory }}"
+          env:
+          - name: SPARK_MASTER
+            value: "spark://{{ template "master-fullname" . }}:{{ .Values.Master.ServicePort }}"
+          - name: SPARK_MASTER_HOST              
+            value: {{ template "master-fullname" . }}
+          - name: "SPARK_DRIVER_HOST"   
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+

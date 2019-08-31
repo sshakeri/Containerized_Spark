@@ -1,0 +1,23 @@
+FROM sshakeri/ubuntu:java_spark_conda_full
+ARG spark_uid=185
+RUN set -ex && \
+    mkdir -p  /opt/spark/work && \
+    touch /opt/spark/RELEASE && \
+    rm /bin/sh && \
+    ln -sv /bin/bash /bin/sh && \
+    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
+    chgrp root /etc/passwd && chmod ug+rw /etc/passwd &&\
+    apt-get install  tini -y && cp /usr/bin/tini /sbin/tini
+
+ENV SPARK_HOME /opt/spark
+
+WORKDIR /opt/spark/work
+RUN chmod g+w /opt/spark/work
+
+ENTRYPOINT [ "/opt/spark/kubernetes/dockerfiles/spark/entrypoint.sh" ]
+
+# Specify the User that the actual main process will run as
+USER ${spark_uid}
+
+   
+   

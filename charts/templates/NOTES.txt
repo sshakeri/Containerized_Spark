@@ -1,0 +1,4 @@
+*********************
+Spark master scheduler at http://localhost:{{ .Values.WebUi.ServicePort }}                                                                             
+Jupyter Lab at http://localhost:{{ .Values.Jupyter.ServicePort }}           
+********************

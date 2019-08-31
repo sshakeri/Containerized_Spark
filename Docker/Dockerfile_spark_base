@@ -1,0 +1,23 @@
+FROM sshakeri/ubuntu:spark_conda
+
+RUN echo "$LOG_TAG Installing Dremio" && \
+    #Install Dremio
+    mkdir -p /usr/share/man/man1 &&\
+    #add dremio JDBC dreiver
+    curl http://download.dremio.com/jdbc-driver/3.3.2-201908142136370993-d60145d/dremio-jdbc-driver-3.3.2-201908142136370993-d60145d.jar -o /opt/spark/jars/dremio.jar --create-dirs &&\
+    apt-get update -y  &&\
+    apt-get install alien -y &&\
+    curl https://download.dremio.com/odbc-driver/1.4.0.1000/dremio-odbc-1.4.0.1000-1.x86_64.rpm --output dremio.rpm &&\
+    alien -i dremio.rpm  &&\
+    rm dremio.rpm &&\
+    apt-get remove alien -y &&\
+    apt-get clean &&\
+    echo "$LOG_TAG Installing Conda packages" && \
+    conda config --set ssl_verify false && \
+    conda config --add channels anaconda &&\
+    conda config --add channels conda-forge &&\
+    conda install pandas pyarrow findspark jupyter jupyterlab pyodbc sqlalchemy py4j scikit-learn -y &&\
+    conda clean -afy  && \
+    mkdir /code && \
+    cd /code
+   

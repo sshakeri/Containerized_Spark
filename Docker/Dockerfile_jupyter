@@ -1,0 +1,7 @@
+FROM sshakeri/ubuntu:java_spark_conda_full
+ADD /example /code
+ 
+EXPOSE 8080
+CMD cd code && jupyter lab --ip=0.0.0.0 --port=6660 --allow-root --NotebookApp.token='' --NotebookApp.password='' --no-browser 
+   
+   

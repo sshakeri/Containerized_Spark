@@ -1,0 +1,15 @@
+apiVersion: v1
+name: spark
+version: 1.0.0
+appVersion: 2.4.3
+description: Fast and general-purpose cluster computing system.
+home: http://spark.apache.org
+icon: http://spark.apache.org/images/spark-logo-trademark.png
+sources:
+  - https://github.com/kubernetes/kubernetes/tree/master/examples/spark
+  - https://github.com/apache/spark
+  - https://github.com/sshakeri/spark_k83
+maintainers:
+  - name: sshakeri
+    email: shahin.tb.shakeri@gmail.com
+
