@@ -2,7 +2,7 @@
 
 ## Quickly setup various spark configs running on Kubernetes & Docker Desktop
 
-* Containerized Spark 2.4.3 with K83 API server as master for auto provisioning of drivers and workers from Jupyter in client mode. 
+* Containerized Spark 2.4.3 with K8s API server as master for auto provisioning of drivers and workers from Jupyter in client mode. 
 * Cluster, client and local mode equivalent using command line and Jupyter
 * Docker standalone version with no K83 dependency
 ![](jupyter.png)
@@ -10,7 +10,7 @@
 * Spark 2.4.3
 * JDK 8
 * Python 3 on Conda with Jupyter lab, pyarrow & pandas, and Dremio ODBC and JDBC Drivers in the image
-* Helm charts for k83 setups
+* Helm charts for k8s setups
 
 
 Note: *You must mount your own storage or your changes reset when containers shut down*
