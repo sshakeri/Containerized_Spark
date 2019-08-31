@@ -13,7 +13,7 @@
 * Helm charts for k83 setups
 
 
-Note: *You must mount your own storage or your changes reset when containerized shut down*
+Note: *You must mount your own storage or your changes reset when containers shut down*
  
 
 
