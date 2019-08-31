@@ -9,15 +9,16 @@ RUN apt-get update -y  --fix-missing && apt-get -y install curl git bash wget ti
     apt-get clean && \
     \
     mkdir -p "$CONDA_DIR" && \
-    curl "https://repo.continuum.io/miniconda/Miniconda3-4.7.10-Linux-x86_64.sh"  -o miniconda.sh  && \
+    curl "https://repo.continuum.io/miniconda/Miniconda3-4.7.10-Linux-x86_64.sh"  -o miniconda.sh --insecure && \
     bash miniconda.sh -f -b -p "$CONDA_DIR" && \
     echo "export PATH=$CONDA_DIR/bin:\$PATH" > /etc/profile.d/conda.sh && \
     rm miniconda.sh && \
     \
     conda update --all --yes && \
+    conda config --set auto_update_conda False && \
     conda clean -afy && \
     #install spark
-    curl -O https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz && \
+    curl -O https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz  --insecure && \
     tar -xzf spark-2.4.3-bin-hadoop2.7.tgz && \
     mv spark-2.4.3-bin-hadoop2.7  $SPARK_HOME && \
     rm  spark-2.4.3-bin-hadoop2.7.tgz
